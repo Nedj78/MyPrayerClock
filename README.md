@@ -6,7 +6,7 @@ Responsiveness: medium and wide screens
 
 Framework: no
 
-Project: performs calculations and fetches data from an open-source API according to your city.
+Project: performs calculations and fetches data from an open-source API according to city search.
 
 Backend host server: [Aladhan](https://aladhan.com/prayer-times-api
 )
