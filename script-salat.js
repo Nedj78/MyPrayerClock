@@ -49,10 +49,13 @@ function createPrayersList(prayer) {
     const prayerList = document.createElement('div');
     prayerList.classList.add('prayer-times', 'item');
 
+    const cityValue = document.getElementById('input-city').value;
+    const formattedCityValue = cityValue[0].toUpperCase() + cityValue.slice(1);
+
     prayerList.innerHTML = `
         <div class="prayer-info">
-            <h3>${date}</h3>
-            <table>
+            <h3>${date} at <strong>${formattedCityValue}</strong></h3>
+            <center><table>
                 <tr>
                     <td>Fajr:</td>
                     <td>${fajr} am</td> 
@@ -77,7 +80,7 @@ function createPrayersList(prayer) {
                     <td>Isha:</td>
                     <td>${isha} pm</td>
                 </tr>
-            </table>
+            </table></center>
         </div>
     `;
 
