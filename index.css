@@ -112,3 +112,48 @@ footer {
     font-size: 7pt;
     color: white;
 }
+
+/* Media queries pour les écrans de taille moyenne */
+@media screen and (min-width: 901px) and (max-width: 1200px) {
+    .container {
+        width: 40vw; 
+    }
+
+    #input-city {
+        width: 30vw; 
+    }
+
+    table {
+        width: 30vw; 
+    }
+}
+
+/* Media queries pour les grands écrans */
+@media screen and (min-width: 1201px) {
+    .container {
+        width: 30vw;
+    }
+
+    #input-city {
+        width: 20vw; 
+    }
+
+    table {
+        width: 20vw; 
+    }
+}
+
+/* Media queries pour les très petits écrans */
+@media screen and (max-width: 400px) {
+    .container {
+        width: 95vw; 
+    }
+
+    #input-city {
+        width: 85vw; 
+    }
+
+    table {
+        width: 85vw; /* Ajuster la largeur de la table */
+    }
+}
