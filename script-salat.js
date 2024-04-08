@@ -127,9 +127,14 @@ function createPrayersList(prayer) {
             const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
     
-            if (hours === 2 && minutes === 10 && seconds === 40) {
+            if (hours === 2 && minutes === 1 && seconds === 0) {
                 clearInterval(intervalId);
                 countdownElement.textContent = `It's time to pray! 🤲`;
+
+                function textFlashing() {
+                    countdownElement.style.visibility = (countdownElement.style.visibility === 'hidden') ? 'visible' : 'hidden';
+                }
+                setInterval(textFlashing, 300);
             } else {
                 countdownElement.textContent = `${formatTime(hours)} h: ${formatTime(minutes)} m: ${formatTime(seconds)} s`;
             }
