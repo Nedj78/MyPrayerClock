@@ -32,6 +32,7 @@ function fetchPrayerTimes() {
             createPrayersList(data); 
 
             document.getElementById('input-city').value = "";
+            
         })
         .catch(error => {
             console.error('An error occurred:', error.message); 
@@ -94,8 +95,6 @@ function createPrayersList(prayer) {
 
     for (const prayerName in prayer.data.timings) {
         const prayerTime = new Date(date + " " + prayer.data.timings[prayerName]);
-        console.log('Current Time:', currentTime);
-        console.log('Prayer Time:', prayerTime);
     
         if (prayerTime > currentTime) {
             nextPrayerName = prayerName;
@@ -125,7 +124,7 @@ function createPrayersList(prayer) {
         timeRemainingDiv.classList.add('prayer-times', 'item');
         timeRemainingDiv.innerHTML = `
             <div class="prayer-info">
-                <h3 style="font-weight: lighter">Time left for next prayer (${nextPrayerName}):</h3>
+                <h3 style="font-weight: lighter" id="nextprayer">Time left for next prayer (${nextPrayerName}):</h3>
                 <p id="countdown" style="color: rgba(255, 58, 58, 0.752); font-size: 18pt;">${timeRemaining}</p>
             </div>
         `;
@@ -141,9 +140,28 @@ function createPrayersList(prayer) {
     
             const countdownElement = document.getElementById('countdown'); 
             if (hours === 0 && minutes === 0 && seconds === 0) {
+
+                let nextPrayerIndex = Object.keys(prayer.data.timings).indexOf(nextPrayerName);
+                nextPrayerIndex++; // Passer à la prière suivante
+
+                const nextPrayerKeys = Object.keys(prayer.data.timings);
+                let nextPrayerNextName = nextPrayerKeys[nextPrayerIndex];
+
+                // Exclure les valeurs non souhaitées de l'api
+                const excludedKeys = ["Sunrise", "Sunset", "Imsak", "Midnight", "Firstthird", "Lastthird"];
+                while (excludedKeys.includes(nextPrayerNextName)) {
+                    nextPrayerIndex++;
+                    if (nextPrayerIndex >= nextPrayerKeys.length) {
+                        nextPrayerIndex = 0; // Si on dépasse la dernière prière, revenir à la première
+                    }
+                    nextPrayerNextName = nextPrayerKeys[nextPrayerIndex];
+                    }               
+
+                const nextPrayerNext = document.querySelector('#nextprayer');
+                nextPrayerNext.textContent = `Time left for next prayer (${nextPrayerNextName})`;
                 
                 clearInterval(intervalId);
-                countdownElement.textContent = `It's time to pray! 🤲`;
+                countdownElement.textContent = `It's time to pray ${nextPrayerName}! 🤲`;
             
                 function textFlashing() {
                     countdownElement.style.visibility = (countdownElement.style.visibility === 'hidden') ? 'visible' : 'hidden';
