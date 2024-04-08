@@ -158,7 +158,7 @@ function createPrayersList(prayer) {
                     }               
 
                 const nextPrayerNext = document.querySelector('#nextprayer');
-                nextPrayerNext.textContent = `Time left for next prayer (${nextPrayerNextName})`;
+                nextPrayerNext.textContent = `The after prayer is (${nextPrayerNextName}).`;
                 
                 clearInterval(intervalId);
                 countdownElement.textContent = `It's time to pray ${nextPrayerName}! 🤲`;
