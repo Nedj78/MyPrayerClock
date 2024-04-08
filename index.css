@@ -91,7 +91,7 @@ table {
 }
   
 .error {
-  color: red;   
+  color: rgba(255, 58, 58, 0.752);   
 }
 
 #countup {

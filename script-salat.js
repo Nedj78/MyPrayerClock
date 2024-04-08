@@ -111,7 +111,7 @@ function createPrayersList(prayer) {
         timeRemainingDiv.innerHTML = `
             <div class="prayer-info">
                 <h3 style="font-weight: lighter">Time left for the next prayer (${nextPrayerName}):</h3>
-                <p id="countdown" style="color: red; font-size: 18pt;">${timeRemaining}</p>
+                <p id="countdown" style="color:  rgba(255, 58, 58, 0.752); font-size: 18pt;">${timeRemaining}</p>
             </div>
         `;
 
