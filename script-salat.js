@@ -113,7 +113,6 @@ function createPrayersList(prayer) {
             break;
         }
     }
-    
 
     if (nextPrayerTime) {
         const timeDiff = nextPrayerTime - currentTime;
