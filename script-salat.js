@@ -105,42 +105,40 @@ function createPrayersList(prayer) {
         const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
         const timeRemaining = `${hours}:${minutes}:${seconds}`;
-
+    
         const timeRemainingDiv = document.createElement('div');
         timeRemainingDiv.classList.add('prayer-times', 'item');
         timeRemainingDiv.innerHTML = `
             <div class="prayer-info">
-                <h3 style="font-weight: lighter">Time left for the next prayer (${nextPrayerName}):</h3>
-                <p id="countdown" style="color:  rgba(255, 58, 58, 0.752); font-size: 18pt;">${timeRemaining}</p>
+                <h3 style="font-weight: lighter">Time left for next prayer (${nextPrayerName}):</h3>
+                <p id="countdown" style="color: rgba(255, 58, 58, 0.752); font-size: 18pt;">${timeRemaining}</p>
             </div>
         `;
-
+    
         prayerTimesContainer.appendChild(timeRemainingDiv);
-
+    
         // Countdown timer
         const countdownElement = document.getElementById('countdown');
-
+    
         function updateCountdown() {
             const currentTime = new Date();
             const timeDiff = nextPrayerTime - currentTime;
             const hours = Math.floor(timeDiff / (1000 * 60 * 60));
             const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-            countdownElement.textContent = `${formatTime(hours)} h: ${formatTime(minutes)} m: ${formatTime(seconds)} s`;
-
-            if (formatTime(hours) === 0 && formatTime(minutes) === 0 && formatTime(seconds) === 0) {
+    
+            if (hours === 2 && minutes === 10 && seconds === 40) {
                 clearInterval(intervalId);
-                reloadPage()
+                countdownElement.textContent = `It's time to pray! 🤲`;
+            } else {
+                countdownElement.textContent = `${formatTime(hours)} h: ${formatTime(minutes)} m: ${formatTime(seconds)} s`;
             }
         }
         updateCountdown();
         const intervalId = setInterval(updateCountdown, 1000);
-
-        function reloadPage() {
-            location.reload();
-        }
     }
 }
+
 
 function formatTime(time) {
     return time < 10 ? `0${time}` : time;

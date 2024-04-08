@@ -116,10 +116,6 @@ footer {
 /* Media queries pour les écrans de taille moyenne */
 @media screen and (min-width: 901px) and (max-width: 1366px) {
 
-    html {
-        overflow: hidden;
-    }
-
     .container {
         width: 40vw; 
     }
