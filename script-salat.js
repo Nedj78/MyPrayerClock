@@ -128,7 +128,7 @@ function createPrayersList(prayer) {
             const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
             countdownElement.textContent = `${formatTime(hours)} h: ${formatTime(minutes)} m: ${formatTime(seconds)} s`;
 
-            if (formatTime(hours) === '00' && formatTime(minutes) === '00' && formatTime(seconds) === '00') {
+            if (formatTime(hours) === 0 && formatTime(minutes) === 0 && formatTime(seconds) === 0) {
                 clearInterval(intervalId);
                 reloadPage()
             }
