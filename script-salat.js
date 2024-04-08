@@ -127,7 +127,7 @@ function createPrayersList(prayer) {
             const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
     
-            if (hours === 2 && minutes === 1 && seconds === 0) {
+            if (hours === 0 && minutes === 0 && seconds === 0) {
                 clearInterval(intervalId);
                 countdownElement.textContent = `It's time to pray! 🤲`;
 
