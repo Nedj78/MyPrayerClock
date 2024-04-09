@@ -25,14 +25,14 @@ function fetchPrayerTimes() {
             return response.json(); 
         })
         .then(data => {
-            console.log("Données récupérées avec succès :", data);
+
+            console.log("Retrieved data", data);
 
             prayerTimesContainer.innerHTML = ""; 
 
             createPrayersList(data); 
 
             document.getElementById('input-city').value = "";
-            
         })
         .catch(error => {
             console.error('An error occurred:', error.message); 
@@ -41,6 +41,7 @@ function fetchPrayerTimes() {
 }
 
 function createPrayersList(prayer) {
+    const date = prayer.data.date.readable;
     const dayNumber = prayer.data.date.gregorian.month.number;
     const month = prayer.data.date.gregorian.month.en;
     const year = prayer.data.date.gregorian.year;
@@ -66,8 +67,8 @@ function createPrayersList(prayer) {
 
     prayerList.innerHTML = `
         <div class="prayer-info">
-            <h3><strong>${gregorianDate}</strong> at <strong>${formattedCityValue}</strong></h3>
-            <h3><strong>${hijriDate}</strong></h3>
+            <h3>${gregorianDate} at <strong>${formattedCityValue}</strong></h3>
+            <h3>${hijriDate}</h3>
             <center><table>
                 <tr>
                     <td>Fajr:</td>
@@ -104,21 +105,10 @@ function createPrayersList(prayer) {
     let nextPrayerTime = null;
 
     for (const prayerName in prayer.data.timings) {
-        const prayerTime = new Date(gregorianDate + " " + prayer.data.timings[prayerName]);
-    
+        const prayerTime = new Date(date + " " + prayer.data.timings[prayerName]);
         if (prayerTime > currentTime) {
             nextPrayerName = prayerName;
             nextPrayerTime = prayerTime;
-            break;
-        } else if (prayerName === 'Isha') {
-            const tomorrow = new Date(currentTime);
-            tomorrow.setDate(tomorrow.getDate() + 1); // Obtenez la date du lendemain
-    
-            // Obtenez l'heure de Fajr pour le jour suivant
-            const fajrNextDay = new Date(tomorrow.toDateString() + " " + prayer.data.timings.Fajr);
-    
-            nextPrayerName = 'Fajr'; // La prochaine prière est Fajr du jour suivant
-            nextPrayerTime = fajrNextDay;
             break;
         }
     }
@@ -134,12 +124,15 @@ function createPrayersList(prayer) {
         timeRemainingDiv.classList.add('prayer-times', 'item');
         timeRemainingDiv.innerHTML = `
             <div class="prayer-info">
-                <h3 style="font-weight: lighter" id="nextprayer">Time left for next prayer (${nextPrayerName}):</h3>
+                <h3 style="font-weight: lighter">Time left for next prayer (${nextPrayerName}):</h3>
                 <p id="countdown" style="color: rgba(255, 58, 58, 0.752); font-size: 18pt;">${timeRemaining}</p>
             </div>
         `;
     
         prayerTimesContainer.appendChild(timeRemainingDiv);
+    
+        // Countdown timer
+        const countdownElement = document.getElementById('countdown');
     
         function updateCountdown() {
             const currentTime = new Date();
@@ -148,35 +141,13 @@ function createPrayersList(prayer) {
             const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
     
-            const countdownElement = document.getElementById('countdown'); 
             if (hours === 0 && minutes === 0 && seconds === 0) {
-
-                let nextPrayerIndex = Object.keys(prayer.data.timings).indexOf(nextPrayerName);
-                nextPrayerIndex++; // Passer à la prière suivante
-
-                const nextPrayerKeys = Object.keys(prayer.data.timings);
-                let nextPrayerNextName = nextPrayerKeys[nextPrayerIndex];
-
-                // Exclure les valeurs non souhaitées de l'api
-                const excludedKeys = ["Sunrise", "Sunset", "Imsak", "Midnight", "Firstthird", "Lastthird"];
-                while (excludedKeys.includes(nextPrayerNextName)) {
-                    nextPrayerIndex++;
-                    if (nextPrayerIndex >= nextPrayerKeys.length) {
-                        nextPrayerIndex = 0; // Si on dépasse la dernière prière, revenir à la première
-                    }
-                    nextPrayerNextName = nextPrayerKeys[nextPrayerIndex];
-                    }               
-
-                const nextPrayerNext = document.querySelector('#nextprayer');
-                nextPrayerNext.textContent = `The after prayer is (${nextPrayerNextName}).`;
-                
                 clearInterval(intervalId);
-                countdownElement.textContent = `It's time to pray ${nextPrayerName}! 🤲`;
-            
+                countdownElement.textContent = `It's time to pray! 🤲`;
+
                 function textFlashing() {
                     countdownElement.style.visibility = (countdownElement.style.visibility === 'hidden') ? 'visible' : 'hidden';
                 }
-            
                 setInterval(textFlashing, 300);
             } else {
                 countdownElement.textContent = `${formatTime(hours)} h: ${formatTime(minutes)} m: ${formatTime(seconds)} s`;
@@ -185,6 +156,11 @@ function createPrayersList(prayer) {
         updateCountdown();
         const intervalId = setInterval(updateCountdown, 1000);
     }
+}
+
+
+function formatTime(time) {
+    return time < 10 ? `0${time}` : time;
 }
 
 function updateClock() {
@@ -205,9 +181,8 @@ function updateClock() {
     document.getElementById('countup').innerHTML = formattedTime;
 }
 
-function formatTime(time) {
-    return time < 10 ? `0${time}` : time;
-}
-
 setInterval(updateClock, 1000);
 updateClock();
+
+
+
