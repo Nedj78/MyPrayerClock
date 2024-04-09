@@ -67,7 +67,7 @@ function createPrayersList(prayer) {
 
     prayerList.innerHTML = `
         <div class="prayer-info">
-            <h3>${gregorianDate} at <strong>${formattedCityValue}</strong></h3>
+            <h3><strong>${gregorianDate}</strong> at <strong>${formattedCityValue}</strong></h3>
             <h3>${hijriDate}</h3>
             <center><table>
                 <tr>
@@ -100,12 +100,13 @@ function createPrayersList(prayer) {
 
     prayerTimesContainer.appendChild(prayerList);
 
+    let prayerTime; 
     const currentTime = new Date();
     let nextPrayerName = "";
     let nextPrayerTime = null;
 
     for (const prayerName in prayer.data.timings) {
-        const prayerTime = new Date(date + " " + prayer.data.timings[prayerName]);
+        prayerTime = new Date(date + " " + prayer.data.timings[prayerName]);
         if (prayerTime > currentTime) {
             nextPrayerName = prayerName;
             nextPrayerTime = prayerTime;
@@ -124,7 +125,7 @@ function createPrayersList(prayer) {
         timeRemainingDiv.classList.add('prayer-times', 'item');
         timeRemainingDiv.innerHTML = `
             <div class="prayer-info">
-                <h3 style="font-weight: lighter">Time left for next prayer (${nextPrayerName}):</h3>
+                <h3 style="font-weight: lighter" id="nextPrayerNameHtml">Time left for next prayer (${nextPrayerName}):</h3>
                 <p id="countdown" style="color: rgba(255, 58, 58, 0.752); font-size: 18pt;">${timeRemaining}</p>
             </div>
         `;
@@ -151,6 +152,12 @@ function createPrayersList(prayer) {
                 setInterval(textFlashing, 300);
             } else {
                 countdownElement.textContent = `${formatTime(hours)} h: ${formatTime(minutes)} m: ${formatTime(seconds)} s`;
+            }
+
+            const nextPrayerNameHtml = document.getElementById('nextPrayerNameHtml');
+            if (prayerTime === 'Isha') {
+                nextPrayerName = 'Fajr';
+                nextPrayerNameHtml.textContent = `<h3 style="font-weight: lighter" id="nextPrayerNameHtml">Time left for next prayer (${nextPrayerName}):</h3>`;
             }
         }
         updateCountdown();
