@@ -102,13 +102,14 @@ function createPrayersList(prayer) {
 
     let prayerTime; 
     const currentTime = new Date();
+    let currentPrayerName = "";
     let nextPrayerName = "";
     let nextPrayerTime = null;
 
-    for (const prayerName in prayer.data.timings) {
-        prayerTime = new Date(date + " " + prayer.data.timings[prayerName]);
+    for (const currentPrayerName in prayer.data.timings) {
+        prayerTime = new Date(date + " " + prayer.data.timings[currentPrayerName]);
         if (prayerTime > currentTime) {
-            nextPrayerName = prayerName;
+            nextPrayerName = currentPrayerName;
             nextPrayerTime = prayerTime;
             break;
         }
@@ -157,15 +158,15 @@ function createPrayersList(prayer) {
             }
 
             const nextPrayerNameHtml = document.getElementById('nextPrayerNameHtml');
-            if (prayerTime === 'Isha') {
+            if (currentPrayerName === 'Isha') {
                 nextPrayerName = 'Fajr';
                 nextPrayerNameHtml.textContent = `<h3 style="font-weight: lighter" id="nextPrayerNameHtml">Next prayer is ${nextPrayerName}.</h3>`;
                 textFlashing();
             }
         }
         updateCountdown();
-        const intervalId = setInterval(updateCountdown, 1000);
     }
+    const intervalId = setInterval(updateCountdown, 1000);
 }
 
 
