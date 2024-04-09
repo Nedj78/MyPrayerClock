@@ -102,7 +102,6 @@ function createPrayersList(prayer) {
 
     let prayerTime; 
     const currentTime = new Date();
-    let currentPrayerName = "";
     let nextPrayerName = "";
     let nextPrayerTime = null;
 
@@ -135,9 +134,12 @@ function createPrayersList(prayer) {
     
         // Countdown timer
         const countdownElement = document.getElementById('countdown');
+        const nextPrayerNameHtml = document.getElementById('nextPrayerNameHtml');
+        const Title = document.querySelector('title');
 
         function textFlashing() {
             countdownElement.style.visibility = (countdownElement.style.visibility === 'hidden') ? 'visible' : 'hidden';
+            Title.visibility = (Title.style.visibility === 'hidden') ? 'visible' : 'hidden'; 
         }
     
         function updateCountdown() {
@@ -149,20 +151,16 @@ function createPrayersList(prayer) {
     
             if (hours === 0 && minutes === 0 && seconds === 0) {
                 clearInterval(intervalId);
-                countdownElement.textContent = `It's time to pray! 🤲`;
+                countdownElement.textContent = `It's time to pray ${nextPrayerName}! 🤲`;
+                Title.textContent = `Time to pray ${nextPrayerName} !`;
 
+                nextPrayerNameHtml.innerHTML = "";
+            
                 textFlashing();
                 setInterval(textFlashing, 300);
             } else {
                 countdownElement.textContent = `${formatTime(hours)} h: ${formatTime(minutes)} m: ${formatTime(seconds)} s`;
-            }
-
-            const nextPrayerNameHtml = document.getElementById('nextPrayerNameHtml');
-            if (currentPrayerName === 'Isha') {
-                nextPrayerName = 'Fajr';
-                nextPrayerNameHtml.textContent = `<h3 style="font-weight: lighter" id="nextPrayerNameHtml">Next prayer is ${nextPrayerName}.</h3>`;
-                textFlashing();
-            }
+            }            
         }
         updateCountdown();
     }
