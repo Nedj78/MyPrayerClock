@@ -41,7 +41,16 @@ function fetchPrayerTimes() {
 }
 
 function createPrayersList(prayer) {
-    const date = prayer.data.date.readable;
+    const dayNumber = prayer.data.date.gregorian.month.number;
+    const month = prayer.data.date.gregorian.month.en;
+    const year = prayer.data.date.gregorian.year;
+    const gregorianDate = month + " " + dayNumber + ", " + year; 
+
+    const hijriDay = prayer.data.date.hijri.day;
+    const hijriMonth = prayer.data.date.hijri.month.ar;
+    const hijriYear = prayer.data.date.hijri.year;
+    const hijriDate = hijriYear + ", " + hijriMonth + " " + hijriDay; 
+
     const fajr = prayer.data.timings.Fajr;
     const shurooq = prayer.data.timings.Sunrise;
     const dhuhr = prayer.data.timings.Dhuhr;
@@ -57,7 +66,8 @@ function createPrayersList(prayer) {
 
     prayerList.innerHTML = `
         <div class="prayer-info">
-            <h3>${date} at <strong>${formattedCityValue}</strong></h3>
+            <h3><strong>${gregorianDate}</strong> at <strong>${formattedCityValue}</strong></h3>
+            <h3><strong>${hijriDate}</strong></h3>
             <center><table>
                 <tr>
                     <td>Fajr:</td>
@@ -94,7 +104,7 @@ function createPrayersList(prayer) {
     let nextPrayerTime = null;
 
     for (const prayerName in prayer.data.timings) {
-        const prayerTime = new Date(date + " " + prayer.data.timings[prayerName]);
+        const prayerTime = new Date(gregorianDate + " " + prayer.data.timings[prayerName]);
     
         if (prayerTime > currentTime) {
             nextPrayerName = prayerName;
