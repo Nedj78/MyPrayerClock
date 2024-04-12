@@ -49,6 +49,7 @@ const fetchPrayerTimes = () => {
 
 const createPrayersList = (prayer) => {
     const calculMethod = prayer.data.meta.method.name;
+    const methodID = prayer.data.meta.method.id;
 
     const date = prayer.data.date.readable;
     const dayNumber = prayer.data.date.gregorian.month.number;
@@ -140,7 +141,7 @@ const createPrayersList = (prayer) => {
             return daysOfWeek[dayIndex];
         }
         
-        nextPrayerName = getDay(new Date()) === 'Friday' ? 'Jumu\'a' : nextPrayerName;
+        nextPrayerName = (getDay(new Date()) === 'Friday' && currentTime > fajr && currentTime < dhuhr) ? 'Jumu\'a' : nextPrayerName;
         
         if (nextPrayerName === 'Firstthird' || nextPrayerName === 'Lastthird' || nextPrayerName === 'Imsak') {
             document.querySelector('#nextPrayerNameHtml').innerHTML = '';
