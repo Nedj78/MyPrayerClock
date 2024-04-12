@@ -1,5 +1,4 @@
 const prayerTimesContainer = document.querySelector('.prayer-times');
-const cityValue = document.getElementById('input-city').value;
 
 document.getElementById('input-city').addEventListener('keyup', function(event) {
     if (event.key === 'Enter') {
@@ -13,6 +12,31 @@ const formatTime = (time) => {
 
 const fetchPrayerTimes = () => {
     const cityValue = document.getElementById('input-city').value;
+    
+    /*
+    const method_PK = methodID === 1; //University of Islamic Sciences, Karachi
+    const method_US = methodID === 2; // Islamic Society of North America (ISNA)
+    const method_SA_World_League = methodID === 3; // Muslim World League
+    const method_SA_Mekkah = methodID === 4; // Umm Al-Qura University, Makkah
+    const method_EG = methodID === 5; // Egyptian General Authority of Survey
+    const method_IR = methodID === 7; // Institute of Geophysics, University of Tehran
+    const method_Gulf = methodID === 8; // Gulf Region
+    const method_KW = methodID === 9; // Kuwait
+    const method_AE = methodID === 10; // Qatar
+    const method_SG = methodID === 11; // Majlis Ugama Islam Singapura, Singapore
+    const method_FR = methodID === 12; // Union Organization Islamic de France
+    const method_TR = methodID === 13; // Diyanet İşleri Başkanlığı, Turkey (experimental)
+    const method_RU = methodID === 14; // Spiritual Administration of Muslims of Russia
+    const method_Worldwide = methodID === 15; // Moonsighting Committee Worldwide
+    const method_Dubai = methodID === 16; // Dubai
+    const method_MY = methodID === 17; // Jabatan Kemajuan Islam Malaysia (JAKIM)
+    const method_TN = methodID === 18; // Tunisia
+    const method_DZ = methodID === 19; // Algeria
+    const method_ID = methodID === 20; // Kementerian Agama Republik Indonesia
+    const method_MA = methodID === 21; // Morocco
+    const method_PT = methodID === 22; // Comunidade Islamica de Lisboa
+    const method_JO = methodID === 23; // Ministry of Awqaf, Islamic Affairs and Holy Places, Jordan
+    */
 
     fetch(`https://api.aladhan.com/v1/timingsByAddress?address=${cityValue}`)
     .then(response => {
@@ -48,8 +72,7 @@ const fetchPrayerTimes = () => {
 }
 
 const createPrayersList = (prayer) => {
-    const calculMethod = prayer.data.meta.method.name;
-    const methodID = prayer.data.meta.method.id;
+    const methodName = prayer.data.meta.method.name;
 
     const date = prayer.data.date.readable;
     const dayNumber = prayer.data.date.gregorian.month.number;
@@ -105,7 +128,7 @@ const createPrayersList = (prayer) => {
                     <td>${isha} pm</td>
                 </tr>
             </table></center><br>
-            <p style="font-size:8pt"><strong>Calcul</strong>: ${calculMethod}</p>
+            <p style="font-size:8pt"><strong>Calcul</strong>: ${methodName}</p>
         </div>
     `;
 
@@ -153,7 +176,7 @@ const createPrayersList = (prayer) => {
         timeRemainingDiv.innerHTML = `
             <div class="prayer-info">
                 <h3 style="font-weight: lighter" id="nextPrayerNameHtml">Time left for next prayer (${nextPrayerName}):</h3>
-                <p id="countdown" style="color: rgba(255, 58, 58, 0.752); font-size: 18pt;">${timeRemaining}</p>
+                <strong><p id="countdown" style="color: rgba(255, 58, 58, 0.752); font-size: 18pt;">${timeRemaining}</p></strong>
             </div>
         `;
     
