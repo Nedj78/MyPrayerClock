@@ -7,7 +7,11 @@ document.getElementById('input-city').addEventListener('keyup', function(event) 
     } 
 });
 
-function fetchPrayerTimes() {
+const formatTime = (time) => {
+    return time < 10 ? `0${time}` : time;
+}
+
+const fetchPrayerTimes = () => {
     const cityValue = document.getElementById('input-city').value;
 
     fetch(`https://api.aladhan.com/v1/timingsByAddress?address=${cityValue}`)
@@ -43,8 +47,7 @@ function fetchPrayerTimes() {
         });
 }
 
-function createPrayersList(prayer) {
-
+const createPrayersList = (prayer) => {
     const calculMethod = prayer.data.meta.method.name;
 
     const date = prayer.data.date.readable;
@@ -122,7 +125,6 @@ function createPrayersList(prayer) {
     }
 
     if (nextPrayerTime) {
-        
         const timeDiff = nextPrayerTime - currentTime;
         const hours = Math.floor(timeDiff / (1000 * 60 * 60));
         const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
@@ -132,7 +134,7 @@ function createPrayersList(prayer) {
 
         nextPrayerName = nextPrayerName === 'Sunset' ? 'Maghrib' : (nextPrayerName === 'Sunrise' ? 'Shuruq' : nextPrayerName);
 
-        function getDay(date) {
+        const getDay = (date) => {
             const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             const dayIndex = date.getDay();
             return daysOfWeek[dayIndex];
@@ -161,7 +163,7 @@ function createPrayersList(prayer) {
         const nextPrayerNameHtml = document.getElementById('nextPrayerNameHtml');
         const Title = document.querySelector('title');
 
-        function textFlashing() {
+        const textFlashing = () => {
             countdownElement.style.visibility = (countdownElement.style.visibility === 'hidden') ? 'visible' : 'hidden';
             Title.visibility = (Title.style.visibility === 'hidden') ? 'visible' : 'hidden'; 
         }
@@ -191,11 +193,7 @@ function createPrayersList(prayer) {
     const intervalId = setInterval(updateCountdown, 1000);
 }
 
-function formatTime(time) {
-    return time < 10 ? `0${time}` : time;
-}
-
-function updateClock() {
+const updateClock = () => {
     const now = new Date();
     const hours = now.getHours();
     const minutes = now.getMinutes();
