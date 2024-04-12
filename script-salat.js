@@ -166,7 +166,7 @@ const createPrayersList = (prayer) => {
         
         nextPrayerName = (getDay(new Date()) === 'Friday' && currentTime > fajr && currentTime < dhuhr) ? 'Jumu\'a' : nextPrayerName;
         
-        if (nextPrayerName === 'Firstthird' || nextPrayerName === 'Lastthird' || nextPrayerName === 'Imsak') {
+        if (nextPrayerName === 'Midnight' || nextPrayerName === 'Firstthird' || nextPrayerName === 'Lastthird' || nextPrayerName === 'Imsak') {
             document.querySelector('#nextPrayerNameHtml').innerHTML = '';
             document.querySelector('#countdown').innerHTML = '';
         }
