@@ -28,11 +28,14 @@ function fetchPrayerTimes() {
 
             console.log("Retrieved data", data);
 
+            prayerTimesContainer.classList.add('fadeIn');
+
             prayerTimesContainer.innerHTML = ""; 
 
             createPrayersList(data); 
 
             document.getElementById('input-city').value = "";
+            
         })
         .catch(error => {
             console.error('An error occurred:', error.message); 
@@ -41,6 +44,9 @@ function fetchPrayerTimes() {
 }
 
 function createPrayersList(prayer) {
+
+    const calculMethod = prayer.data.meta.method.name;
+
     const date = prayer.data.date.readable;
     const dayNumber = prayer.data.date.gregorian.month.number;
     const month = prayer.data.date.gregorian.month.en;
@@ -60,7 +66,7 @@ function createPrayersList(prayer) {
     const isha = prayer.data.timings.Isha;
 
     const prayerList = document.createElement('div');
-    prayerList.classList.add('prayer-times', 'item');
+    prayerList.classList.add('prayer-times', 'item', 'fadeIn');
 
     const cityValue = document.getElementById('input-city').value;
     const formattedCityValue = cityValue[0].toUpperCase() + cityValue.slice(1);
@@ -94,7 +100,8 @@ function createPrayersList(prayer) {
                     <td>Isha:</td>
                     <td>${isha} pm</td>
                 </tr>
-            </table></center>
+            </table></center><br>
+            <p style="font-size:8pt"><strong>Calcul</strong>: ${calculMethod}</p>
         </div>
     `;
 
@@ -115,13 +122,30 @@ function createPrayersList(prayer) {
     }
 
     if (nextPrayerTime) {
+        
         const timeDiff = nextPrayerTime - currentTime;
         const hours = Math.floor(timeDiff / (1000 * 60 * 60));
         const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
         const timeRemaining = `${hours}:${minutes}:${seconds}`;
-    
-        const timeRemainingDiv = document.createElement('div');
+        console.log(nextPrayerName)
+
+        nextPrayerName = nextPrayerName === 'Sunset' ? 'Maghrib' : (nextPrayerName === 'Sunrise' ? 'Shuruq' : nextPrayerName);
+
+        function getDay(date) {
+            const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const dayIndex = date.getDay();
+            return daysOfWeek[dayIndex];
+        }
+        
+        nextPrayerName = getDay(new Date()) === 'Friday' ? 'Jumu\'a' : nextPrayerName;
+        
+        if (nextPrayerName === 'Firstthird' || nextPrayerName === 'Lastthird' || nextPrayerName === 'Imsak') {
+            document.querySelector('#nextPrayerNameHtml').innerHTML = '';
+            document.querySelector('#countdown').innerHTML = '';
+        }
+
+        let timeRemainingDiv = document.createElement('div');
         timeRemainingDiv.classList.add('prayer-times', 'item');
         timeRemainingDiv.innerHTML = `
             <div class="prayer-info">
@@ -166,7 +190,6 @@ function createPrayersList(prayer) {
     }
     const intervalId = setInterval(updateCountdown, 1000);
 }
-
 
 function formatTime(time) {
     return time < 10 ? `0${time}` : time;
