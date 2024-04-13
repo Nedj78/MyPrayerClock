@@ -12,31 +12,6 @@ const formatTime = (time) => {
 
 const fetchPrayerTimes = () => {
     const cityValue = document.getElementById('input-city').value;
-    
-    /*
-    const method_PK = methodID === 1; //University of Islamic Sciences, Karachi
-    const method_US = methodID === 2; // Islamic Society of North America (ISNA)
-    const method_SA_World_League = methodID === 3; // Muslim World League
-    const method_SA_Mekkah = methodID === 4; // Umm Al-Qura University, Makkah
-    const method_EG = methodID === 5; // Egyptian General Authority of Survey
-    const method_IR = methodID === 7; // Institute of Geophysics, University of Tehran
-    const method_Gulf = methodID === 8; // Gulf Region
-    const method_KW = methodID === 9; // Kuwait
-    const method_AE = methodID === 10; // Qatar
-    const method_SG = methodID === 11; // Majlis Ugama Islam Singapura, Singapore
-    const method_FR = methodID === 12; // Union Organization Islamic de France
-    const method_TR = methodID === 13; // Diyanet İşleri Başkanlığı, Turkey (experimental)
-    const method_RU = methodID === 14; // Spiritual Administration of Muslims of Russia
-    const method_Worldwide = methodID === 15; // Moonsighting Committee Worldwide
-    const method_Dubai = methodID === 16; // Dubai
-    const method_MY = methodID === 17; // Jabatan Kemajuan Islam Malaysia (JAKIM)
-    const method_TN = methodID === 18; // Tunisia
-    const method_DZ = methodID === 19; // Algeria
-    const method_ID = methodID === 20; // Kementerian Agama Republik Indonesia
-    const method_MA = methodID === 21; // Morocco
-    const method_PT = methodID === 22; // Comunidade Islamica de Lisboa
-    const method_JO = methodID === 23; // Ministry of Awqaf, Islamic Affairs and Holy Places, Jordan
-    */
 
     fetch(`https://api.aladhan.com/v1/timingsByAddress?address=${cityValue}`)
     .then(response => {
@@ -54,16 +29,13 @@ const fetchPrayerTimes = () => {
         })
         .then(data => {
 
-            console.log("Retrieved data", data);
-
             prayerTimesContainer.classList.add('fadeIn');
 
             prayerTimesContainer.innerHTML = ""; 
 
             createPrayersList(data); 
 
-            document.getElementById('input-city').value = "";
-            
+            document.getElementById('input-city').value = "";  
         })
         .catch(error => {
             console.error('An error occurred:', error.message); 
@@ -146,7 +118,7 @@ const createPrayersList = (prayer) => {
             nextPrayerTime = prayerTime;
             break;
         }
-    }
+    };   
 
     if (nextPrayerTime) {
         const timeDiff = nextPrayerTime - currentTime;
@@ -154,7 +126,6 @@ const createPrayersList = (prayer) => {
         const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
         const timeRemaining = `${hours}:${minutes}:${seconds}`;
-        console.log(nextPrayerName)
 
         nextPrayerName = nextPrayerName === 'Sunset' ? 'Maghrib' : (nextPrayerName === 'Sunrise' ? 'Shuruq' : nextPrayerName);
 
@@ -177,8 +148,17 @@ const createPrayersList = (prayer) => {
             <div class="prayer-info">
                 <h3 style="font-weight: lighter" id="nextPrayerNameHtml">Time left for next prayer (${nextPrayerName}):</h3>
                 <strong><p id="countdown" style="color: rgba(255, 58, 58, 0.752); font-size: 18pt;">${timeRemaining}</p></strong>
+                <div class="countdown-container">
+            <div class="countdown-circle">
+                <div class="countdown-progress" id="countdown-progress"></div>
+            </div>
+            </div>
             </div>
         `;
+
+        if (hours < 0) {
+            timeRemainingDiv.style.display = "none";
+        }        
     
         prayerTimesContainer.appendChild(timeRemainingDiv);
     
@@ -195,10 +175,13 @@ const createPrayersList = (prayer) => {
         function updateCountdown() {
             const currentTime = new Date();
             const timeDiff = nextPrayerTime - currentTime;
+
             const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+            console.log(hours)
+
             const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-    
+            
             if (hours === 0 && minutes === 0 && seconds === 0) {
                 clearInterval(intervalId);
                 countdownElement.textContent = `It's time to pray ${nextPrayerName}! 🤲`;
@@ -239,4 +222,47 @@ setInterval(updateClock, 1000);
 updateClock();
 
 
+    /*
+    const method_PK = methodID === 1; //University of Islamic Sciences, Karachi
 
+    const method_US = methodID === 2; // Islamic Society of North America (ISNA)
+
+    const method_SA_World_League = methodID === 3; // Muslim World League
+
+    const method_SA_Mekkah = methodID === 4; // Umm Al-Qura University, Makkah
+
+    const method_EG = methodID === 5; // Egyptian General Authority of Survey
+
+    const method_IR = methodID === 7; // Institute of Geophysics, University of Tehran
+
+    const method_Gulf = methodID === 8; // Gulf Region
+
+    const method_KW = methodID === 9; // Kuwait
+
+    const method_AE = methodID === 10; // Qatar
+
+    const method_SG = methodID === 11; // Majlis Ugama Islam Singapura, Singapore
+
+    const method_FR = methodID === 12; // Union Organization Islamic de France
+
+    const method_TR = methodID === 13; // Diyanet İşleri Başkanlığı, Turkey (experimental)
+
+    const method_RU = methodID === 14; // Spiritual Administration of Muslims of Russia
+
+    const method_Worldwide = methodID === 15; // Moonsighting Committee Worldwide
+
+    const method_Dubai = methodID === 16; // Dubai
+
+    const method_MY = methodID === 17; // Jabatan Kemajuan Islam Malaysia (JAKIM)
+    const method_TN = methodID === 18; // Tunisia
+
+    const method_DZ = methodID === 19; // Algeria
+
+    const method_ID = methodID === 20; // Kementerian Agama Republik Indonesia
+
+    const method_MA = methodID === 21; // Morocco
+
+    const method_PT = methodID === 22; // Comunidade Islamica de Lisboa
+
+    const method_JO = methodID === 23; // Ministry of Awqaf, Islamic Affairs and Holy Places, Jordan
+    */
