@@ -11,4 +11,6 @@ Project: performs calculations and fetches data from an open-source API accordin
 Backend host server: [Aladhan](https://aladhan.com/prayer-times-api
 )
 
-Frontend host server: jekyll (Github pages)
+Frontend host servers: 
+- jekyll (Github pages)
+- now (vercel platform)
