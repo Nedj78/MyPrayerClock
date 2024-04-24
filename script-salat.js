@@ -1,7 +1,23 @@
+
 const prayerTimesContainer = document.querySelector('.prayer-times');
+
+const loadingIcon = document.querySelector('.icon');
+
+function showLoadingIcon() {
+    loadingIcon.style.display = 'block'; 
+
+    setTimeout(function() {
+        loadingIcon.style.display = 'none';
+    }, 800);
+}
+
+function hideLoadingIcon() {
+    loadingIcon.style.display = 'none';
+}
 
 document.getElementById('input-city').addEventListener('keyup', function(event) {
     if (event.key === 'Enter') {
+        showLoadingIcon(); 
         fetchPrayerTimes();
     } 
 });
@@ -36,6 +52,8 @@ const fetchPrayerTimes = () => {
             createPrayersList(data); 
 
             document.getElementById('input-city').value = "";  
+
+            hideLoadingIcon();
         })
         .catch(error => {
             console.error('An error occurred:', error.message); 
@@ -187,7 +205,16 @@ const createPrayersList = (prayer) => {
                 countdownElement.textContent = `It's time to pray ${nextPrayerName}! 🤲`;
                 Title.textContent = `Time to pray ${nextPrayerName} !`;
 
-                nextPrayerNameHtml.innerHTML = "";
+                nextPrayerNameHtml.innerHTML = ""; 
+            
+                textFlashing();
+                setInterval(textFlashing, 300);
+            } else if (hours < 0) {
+                clearInterval(intervalId);
+                countdownElement.textContent = "";
+                Title.textContent = "";
+
+                nextPrayerNameHtml.innerHTML = ""; 
             
                 textFlashing();
                 setInterval(textFlashing, 300);
@@ -266,3 +293,4 @@ updateClock();
 
     const method_JO = methodID === 23; // Ministry of Awqaf, Islamic Affairs and Holy Places, Jordan
     */
+

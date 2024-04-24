@@ -6,12 +6,11 @@ body {
 }
   
 .main-container {
-    padding: 25vh 0 7vh 0;
+    padding: 25vh 0 25vh 0;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 120vh;
-    transition: 0.6s ease-out;
   }
   
 .container {
@@ -20,7 +19,6 @@ body {
     background-color: #085c76;
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
     border-radius: 15px;
-
 }
   
 .header {
@@ -120,9 +118,18 @@ table {
     margin-bottom: 15px;
 }
 
+input[type="text"]:focus {
+    outline: none;
+}
+
+.icon {
+    display: none;
+}
+
 footer {
     font-size: 7pt;
     color: white;
+    padding: 0 0 5px 0;
 }
 
 /* Media queries pour les écrans de taille moyenne */
