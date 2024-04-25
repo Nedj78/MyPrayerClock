@@ -165,7 +165,7 @@ const createPrayersList = (prayer) => {
         timeRemainingDiv.innerHTML = `
             <div class="prayer-info">
                 <h3 style="font-weight: lighter" id="nextPrayerNameHtml">Time left for next prayer (${nextPrayerName}):</h3>
-                <strong><p id="countdown" style="color: rgba(255, 58, 58, 0.752); -webkit-text-stroke: 1px grey; font-size: 23pt; text-shadow: 0 0 5px rgba(90, 90, 90, 0.752);">${timeRemaining}</p></strong>
+                <strong><p id="countdown" style="color: rgba(255, 58, 58, 0.752); -webkit-text-stroke: 1px black; font-size: 23pt; text-shadow: 0 5px 5px 5px rgba(90, 90, 90, 0.752);">${timeRemaining}</p></strong>
                 <div class="countdown-container">
             <div class="countdown-circle">
                 <div class="countdown-progress" id="countdown-progress"></div>
@@ -209,6 +209,9 @@ const createPrayersList = (prayer) => {
             
                 textFlashing();
                 setInterval(textFlashing, 300);
+                
+                const audio = new Audio('prayer_sound.mp3');
+                audio.play();
             } else if (hours < 0) {
                 clearInterval(intervalId);
                 countdownElement.textContent = "";
