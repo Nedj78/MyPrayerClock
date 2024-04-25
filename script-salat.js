@@ -86,7 +86,7 @@ const createPrayersList = (prayer) => {
     prayerList.classList.add('prayer-times', 'item', 'fadeIn');
 
     const cityValue = document.getElementById('input-city').value;
-    const formattedCityValue = cityValue[0].toUpperCase() + cityValue.slice(1);
+    const formattedCityValue = cityValue[0].toUpperCase() + cityValue.slice(1).toLowerCase();
 
     prayerList.innerHTML = `
         <div class="prayer-info">
