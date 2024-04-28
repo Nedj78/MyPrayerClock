@@ -151,7 +151,7 @@ const createPrayersList = (prayer) => {
             const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             const dayIndex = date.getDay();
             return daysOfWeek[dayIndex];
-        }
+        } 
         
         nextPrayerName = (getDay(new Date()) === 'Friday' && currentTime > fajr && currentTime < dhuhr) ? 'Jumu\'a' : nextPrayerName;
         
@@ -200,27 +200,30 @@ const createPrayersList = (prayer) => {
             const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
             
-            if (hours === 0 && minutes === 0 && seconds === 0) {
+            if (hours === 0 && minutes === 24 && seconds === 10) {
                 clearInterval(intervalId);
+
                 countdownElement.textContent = `It's time to pray ${nextPrayerName}! 🤲`;
+
                 Title.textContent = `Time to pray ${nextPrayerName} !`;
 
                 nextPrayerNameHtml.innerHTML = ""; 
             
                 textFlashing();
                 setInterval(textFlashing, 300);
-                
+
                 const audio = new Audio('prayer_sound.mp3');
                 audio.play();
+
             } else if (hours < 0) {
                 clearInterval(intervalId);
-                countdownElement.textContent = "";
+
+                countdownElement.textContent = `00 h: 00 m: 00 s`;
+
                 Title.textContent = "";
 
                 nextPrayerNameHtml.innerHTML = ""; 
             
-                textFlashing();
-                setInterval(textFlashing, 300);
             } else {
                 countdownElement.textContent = `${formatTime(hours)} h: ${formatTime(minutes)} m: ${formatTime(seconds)} s`;
             }            
@@ -250,6 +253,7 @@ const updateClock = () => {
 
 setInterval(updateClock, 1000);
 updateClock();
+
 
 
     /*
