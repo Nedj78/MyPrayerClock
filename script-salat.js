@@ -58,6 +58,12 @@ const fetchPrayerTimes = () => {
         .catch(error => {
             console.error('An error occurred:', error.message); 
             error.textContent = "<p>An error occurred while fetching data. Please try again later.</p>";
+
+            // No internet connection
+            const errorMessage = document.createElement('p');
+            errorMessage.textContent = "An error occurred while fetching data. Please check your internet connection and try again later.";
+            prayerTimesContainer.innerHTML = "";
+            prayerTimesContainer.appendChild(errorMessage);
         });
 }
 
@@ -65,15 +71,33 @@ const createPrayersList = (prayer) => {
     const methodName = prayer.data.meta.method.name;
 
     const date = prayer.data.date.readable;
-    const dayNumber = prayer.data.date.gregorian.month.number;
-    const month = prayer.data.date.gregorian.month.en;
+    let dayNumber = prayer.data.date.gregorian.day;
+
+    function getOrdinalSuffix(dayNumber) {
+        if (dayNumber === 31) {
+            return dayNumber + '<sup>st</sup>';
+        } else if (dayNumber % 10 === 1) {
+            return dayNumber + '<sup>st</sup>';
+        } else if (dayNumber % 10 === 2) {
+            return dayNumber + '<sup>nd</sup>';
+        } else if (dayNumber % 10 === 3) {
+            return dayNumber + '<sup>rd</sup>';
+        } else {
+            return dayNumber + '<sup>th</sup>';
+        }
+    }
+    
+    dayNumber = getOrdinalSuffix(dayNumber);
+    const formattedDayNumber = dayNumber.toString().startsWith('0') ? dayNumber.toString().substring(1) : dayNumber.toString();
+    
+    let month = prayer.data.date.gregorian.month.en;
     const year = prayer.data.date.gregorian.year;
-    const gregorianDate = month + " " + dayNumber + ", " + year; 
+    const gregorianDate = month + " " + formattedDayNumber + ", " + year; 
 
     const hijriDay = prayer.data.date.hijri.day;
     const hijriMonth = prayer.data.date.hijri.month.ar;
     const hijriYear = prayer.data.date.hijri.year;
-    const hijriDate = hijriYear + ", " + hijriMonth + " " + hijriDay; 
+    const hijriDate = hijriYear + "، " + hijriMonth + " " + hijriDay; 
 
     const fajr = prayer.data.timings.Fajr;
     const shurooq = prayer.data.timings.Sunrise;
@@ -90,8 +114,8 @@ const createPrayersList = (prayer) => {
 
     prayerList.innerHTML = `
         <div class="prayer-info">
-            <h3><strong>${gregorianDate}</strong> at <strong>${formattedCityValue}</strong></h3>
-            <h3>${hijriDate}</h3>
+            <h3><strong>Today's ${gregorianDate}</strong> at <strong>${formattedCityValue}</strong></h3>
+            <h3>اليوم ${hijriDate}</h3>
             <center><table>
                 <tr>
                     <td>Fajr:</td>
@@ -118,7 +142,7 @@ const createPrayersList = (prayer) => {
                     <td>${isha} pm</td>
                 </tr>
             </table></center><br>
-            <p style="font-size:8pt"><strong>Calcul</strong>: ${methodName}</p>
+            <p style="font-size:8pt">${methodName}</p>
         </div>
     `;
 
@@ -168,7 +192,7 @@ const createPrayersList = (prayer) => {
                 <strong><p id="countdown" style="color: rgba(255, 58, 58, 0.752); -webkit-text-stroke: 1px black; font-size: 23pt; text-shadow: 0 5px 5px 5px rgba(90, 90, 90, 0.752);">${timeRemaining}</p></strong>
                 <div class="countdown-container">
             <div class="countdown-circle">
-                <div class="countdown-progress" id="countdown-progress"></div>
+                <div class="countdown-progress" id="countdown-progress"></div><br>
             </div>
             </div>
             </div>
@@ -200,8 +224,7 @@ const createPrayersList = (prayer) => {
             const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
             
-            if (hours === 0 && minutes === 0 && seconds === 0) {
-                clearInterval(intervalId);
+            if (countdownElement.textContent === `00 h: 00 m: 00 s`) {
 
                 countdownElement.textContent = `It's time to pray ${nextPrayerName}! 🤲`;
 
@@ -214,16 +237,10 @@ const createPrayersList = (prayer) => {
 
                 const audio = new Audio('prayer_sound.mp3');
                 audio.play();
-
-            } else if (hours < 0) {
-                clearInterval(intervalId);
-
-                countdownElement.textContent = `00 h: 00 m: 00 s`;
-
-                Title.textContent = "";
-
-                nextPrayerNameHtml.innerHTML = ""; 
-            
+                return;
+            } else if (seconds < 1) {
+                countdownElement.textContent === `00 h: 00 m: 00 s`;
+                return;
             } else {
                 countdownElement.textContent = `${formatTime(hours)} h: ${formatTime(minutes)} m: ${formatTime(seconds)} s`;
             }            
