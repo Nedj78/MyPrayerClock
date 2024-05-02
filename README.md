@@ -13,4 +13,4 @@ Backend host server: [Aladhan](https://aladhan.com/prayer-times-api
 
 Frontend host servers: 
 - [jekyll (Github pages)](https://nedj78.github.io/MyPrayerClock/)
-- [now (versel platform)][(https://my-prayer-clock.versel.app/)](https://my-prayer-clock.vercel.app/)
+- [now (versel platform)](https://my-prayer-clock.versel.app/)](https://my-prayer-clock.vercel.app/)
