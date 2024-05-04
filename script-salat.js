@@ -248,7 +248,7 @@ const createPrayersList = (prayer) => {
         updateCountdown();
     }
     const intervalId = setInterval(updateCountdown, 1000);
-}
+} 
 
 const updateClock = () => {
     const now = new Date();
