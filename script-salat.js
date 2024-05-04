@@ -61,7 +61,7 @@ const fetchPrayerTimes = () => {
 
             // No internet connection
             const errorMessage = document.createElement('p');
-            errorMessage.textContent = "An error occurred while fetching data. Please check your internet connection and try again later.";
+            errorMessage.textContent = "Please check your internet connection and try again later.";
             prayerTimesContainer.innerHTML = "";
             prayerTimesContainer.appendChild(errorMessage);
         });
@@ -226,6 +226,8 @@ const createPrayersList = (prayer) => {
             
             if (countdownElement.textContent === `00 h: 00 m: 00 s`) {
 
+                clearInterval(intervalId);
+
                 countdownElement.textContent = `It's time to pray ${nextPrayerName}! 🤲`;
 
                 Title.textContent = `Time to pray ${nextPrayerName} !`;
@@ -237,10 +239,8 @@ const createPrayersList = (prayer) => {
 
                 const audio = new Audio('prayer_sound.mp3');
                 audio.play();
-                return;
-            } else if (seconds < 1) {
-                countdownElement.textContent === `00 h: 00 m: 00 s`;
-                return;
+            } else if (countdownElement.textContent !== `00 h: 00 m: 00 s` && seconds < 0) {
+                countdownElement.textContent = `The current prayer times are not up to date, please retry another search`;                
             } else {
                 countdownElement.textContent = `${formatTime(hours)} h: ${formatTime(minutes)} m: ${formatTime(seconds)} s`;
             }            
