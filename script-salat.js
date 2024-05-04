@@ -240,7 +240,7 @@ const createPrayersList = (prayer) => {
                 const audio = new Audio('prayer_sound.mp3');
                 audio.play();
             } else if (countdownElement.textContent !== `00 h: 00 m: 00 s` && seconds < 0) {
-                countdownElement.textContent = `The current prayer times are not up to date, please retry another search`;                
+                countdownElement.textContent = `The current result is not up to date, please retry another search`;                
             } else {
                 countdownElement.textContent = `${formatTime(hours)} h: ${formatTime(minutes)} m: ${formatTime(seconds)} s`;
             }            
