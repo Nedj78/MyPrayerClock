@@ -30,42 +30,34 @@ const fetchPrayerTimes = () => {
     const cityValue = document.getElementById('input-city').value;
 
     fetch(`https://api.aladhan.com/v1/timingsByAddress?address=${cityValue}`)
-    .then(response => {
-        if (!response.ok) {
-            if (response.status === 400 || response.status === 404) {
-                prayerTimesContainer.innerHTML = ""; 
-                prayerTimesContainer.innerHTML += `Please, enter an existing city.`;
-                prayerTimesContainer.style.color = 'red';
-                throw new Error('City not found in the database.');
-            } else {
-                throw new Error('An error occurred while fetching data.');
+        .then(response => {
+            if (!response.ok) {
+                if (response.status === 404 || response.status === 400) {
+                    prayerTimesContainer.textContent = `Please enter an existing city`;
+            } 
+                prayerTimesContainer.style.color = "red";
+                prayerTimesContainer.style.fontSize = "10pt";
+                throw new Error('Failed to fetch data');
             }
-        }
             return response.json(); 
         })
         .then(data => {
-
             prayerTimesContainer.classList.add('fadeIn');
-
             prayerTimesContainer.innerHTML = ""; 
-
             createPrayersList(data); 
-
             document.getElementById('input-city').value = "";  
-
             hideLoadingIcon();
         })
         .catch(error => {
-            console.error('An error occurred:', error.message); 
-            error.textContent = "<p>An error occurred while fetching data. Please try again later.</p>";
-
-            // No internet connection
-            const errorMessage = document.createElement('p');
-            errorMessage.textContent = "Please check your internet connection and try again later.";
-            prayerTimesContainer.innerHTML = "";
-            prayerTimesContainer.appendChild(errorMessage);
+            console.error('An error occurred:', error);
+            if (error.message === 'Failed to fetch') {
+                prayerTimesContainer.textContent = `Failure while retrieving data. Please check your internet connection and try again.`;
+                prayerTimesContainer.style.color = "red";
+                prayerTimesContainer.style.fontSize = "10pt";
+            }
         });
-}
+};
+
 
 const createPrayersList = (prayer) => {
     const methodName = prayer.data.meta.method.name;
@@ -91,13 +83,13 @@ const createPrayersList = (prayer) => {
     const formattedDayNumber = dayNumber.toString().startsWith('0') ? dayNumber.toString().substring(1) : dayNumber.toString();
     
     let month = prayer.data.date.gregorian.month.en;
-    const year = prayer.data.date.gregorian.year;
-    const gregorianDate = month + " " + formattedDayNumber + ", " + year; 
+    const gregorianYear = prayer.data.date.gregorian.year;
+    const gregorianDate = month + " " + formattedDayNumber + ", " + gregorianYear; 
 
     const hijriDay = prayer.data.date.hijri.day;
     const hijriMonth = prayer.data.date.hijri.month.ar;
     const hijriYear = prayer.data.date.hijri.year;
-    const hijriDate = hijriYear + "، " + hijriMonth + " " + hijriDay; 
+    const hijriDate = "اليوم " + hijriDay + " " + hijriMonth + " ," + hijriYear + " ";
 
     const fajr = prayer.data.timings.Fajr;
     const shurooq = prayer.data.timings.Sunrise;
@@ -115,7 +107,7 @@ const createPrayersList = (prayer) => {
     prayerList.innerHTML = `
         <div class="prayer-info">
             <h3><strong>Today's ${gregorianDate}</strong> at <strong>${formattedCityValue}</strong></h3>
-            <h3>اليوم ${hijriDate}</h3>
+            <h3>${hijriDate}</h3>
             <center><table>
                 <tr>
                     <td>Fajr:</td>
@@ -225,7 +217,6 @@ const createPrayersList = (prayer) => {
             const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
             
             if (countdownElement.textContent === `00 h: 00 m: 00 s`) {
-
                 clearInterval(intervalId);
 
                 countdownElement.textContent = `It's time to pray ${nextPrayerName}! 🤲`;
@@ -240,7 +231,11 @@ const createPrayersList = (prayer) => {
                 const audio = new Audio('prayer_sound.mp3');
                 audio.play();
             } else if (countdownElement.textContent !== `00 h: 00 m: 00 s` && seconds < 0) {
-                countdownElement.textContent = `The current result is not up to date, please retry another search`;                
+                nextPrayerNameHtml.innerHTML = ""; 
+
+                countdownElement.textContent = `You are in late for ${nextPrayerName} !`;    
+                
+                countdownElement.display.fontSize = `10pt`;
             } else {
                 countdownElement.textContent = `${formatTime(hours)} h: ${formatTime(minutes)} m: ${formatTime(seconds)} s`;
             }            
@@ -256,17 +251,44 @@ const updateClock = () => {
     const minutes = now.getMinutes();
     const seconds = now.getSeconds();
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const currentDay = daysOfWeek[now.getDay()];
+    const currentDayEN = daysOfWeek[now.getDay()];
+    
+    let arabicDayofWeek;
+    
+    switch (currentDayEN) {
+        case 'Sunday':
+            arabicDayofWeek = 'الأحد';
+            break;
+        case 'Monday':
+            arabicDayofWeek = 'الإثنين';
+            break;
+        case 'Tuesday':
+            arabicDayofWeek = 'الثلاثاء';
+            break;
+        case 'Wednesday':
+            arabicDayofWeek = 'الأربعاء';
+            break;
+        case 'Thursday':
+            arabicDayofWeek = 'الخميس';
+            break;
+        case 'Friday':
+            arabicDayofWeek = 'الجمعة';
+            break;
+        case 'Saturday':
+            arabicDayofWeek = 'السبت';
+            break;
+    }    
 
     let formattedTime;
     if (hours >= 0 && hours < 12) {
-        formattedTime = `${formatTime(currentDay)}<br>${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)} am`;
+        formattedTime = `${formatTime(currentDayEN)}<br>${arabicDayofWeek}<br><br>${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)} am`;
     } else {
-        formattedTime = `${formatTime(currentDay)}<br>${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)} pm`;
+        formattedTime = `${formatTime(currentDayEN)}<br>${arabicDayofWeek}<br><br>${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)} pm`;
     }
 
     document.getElementById('countup').innerHTML = formattedTime;
 }
+
 
 setInterval(updateClock, 1000);
 updateClock();
