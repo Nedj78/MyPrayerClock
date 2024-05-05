@@ -78,7 +78,7 @@ const createPrayersList = (prayer) => {
             return dayNumber + '<sup>th</sup>';
         }
     }
-    
+                                   
     dayNumber = getOrdinalSuffix(dayNumber);
     const formattedDayNumber = dayNumber.toString().startsWith('0') ? dayNumber.toString().substring(1) : dayNumber.toString();
      
@@ -181,7 +181,7 @@ const createPrayersList = (prayer) => {
         timeRemainingDiv.innerHTML = `
             <div class="prayer-info">
                 <h3 style="font-weight: lighter" id="nextPrayerNameHtml">Time left for next prayer (${nextPrayerName}):</h3>
-                <strong><p id="countdown" style="color: rgba(255, 58, 58, 0.752); -webkit-text-stroke: 1px black; font-size: 23pt; text-shadow: 0 5px 5px 5px rgba(90, 90, 90, 0.752);">${timeRemaining}</p></strong>
+                <strong><p id="countdown" style="color: rgba(255, 58, 58, 0.752); -webkit-text-stroke: 1px black; font-size: 20pt; text-shadow: 0 5px 5px 5px rgba(90, 90, 90, 0.752);">${timeRemaining}</p></strong>
                 <div class="countdown-container">
             <div class="countdown-circle">
                 <div class="countdown-progress" id="countdown-progress"></div><br>
@@ -231,11 +231,18 @@ const createPrayersList = (prayer) => {
                 const audio = new Audio('prayer_sound.mp3');
                 audio.play();
             } else if (countdownElement.textContent !== `00 h: 00 m: 00 s` && seconds < 0) {
-                nextPrayerNameHtml.innerHTML = ""; 
+                clearInterval(intervalId);
 
-                countdownElement.textContent = `You are in late for ${nextPrayerName} !`;    
-                
-                countdownElement.display.fontSize = `10pt`;
+                countdownElement.textContent = `It's time to pray ${nextPrayerName}! 🤲`;
+
+                Title.textContent = `Time to pray ${nextPrayerName} !`;
+
+                nextPrayerNameHtml.innerHTML = ""; 
+            
+                textFlashing();
+                setInterval(textFlashing, 300);
+
+                const audio = new Audio('prayer_sound.mp3');
             } else {
                 countdownElement.textContent = `${formatTime(hours)} h: ${formatTime(minutes)} m: ${formatTime(seconds)} s`;
             }            
