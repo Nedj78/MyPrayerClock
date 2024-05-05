@@ -81,7 +81,7 @@ const createPrayersList = (prayer) => {
     
     dayNumber = getOrdinalSuffix(dayNumber);
     const formattedDayNumber = dayNumber.toString().startsWith('0') ? dayNumber.toString().substring(1) : dayNumber.toString();
-    
+     
     let month = prayer.data.date.gregorian.month.en;
     const gregorianYear = prayer.data.date.gregorian.year;
     const gregorianDate = month + " " + formattedDayNumber + ", " + gregorianYear; 
