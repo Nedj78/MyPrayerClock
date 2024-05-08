@@ -87,7 +87,7 @@ const createPrayersList = (prayer) => {
     const gregorianDate = month + " " + formattedDayNumber + ", " + gregorianYear; 
 
     const hijriDay = prayer.data.date.hijri.day;
-    const hijriMonth = 'رمضان';
+    const hijriMonth = prayer.data.date.hijri.month.ar;
     const hijriYear = prayer.data.date.hijri.year;
     const hijriDate = "اليوم " + hijriDay + " " + hijriMonth + " ," + hijriYear + " ";
 
