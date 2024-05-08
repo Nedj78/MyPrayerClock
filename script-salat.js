@@ -87,7 +87,7 @@ const createPrayersList = (prayer) => {
     const gregorianDate = month + " " + formattedDayNumber + ", " + gregorianYear; 
 
     const hijriDay = prayer.data.date.hijri.day;
-    const hijriMonth = prayer.data.date.hijri.month.ar;
+    const hijriMonth = 'رمضان';
     const hijriYear = prayer.data.date.hijri.year;
     const hijriDate = "اليوم " + hijriDay + " " + hijriMonth + " ," + hijriYear + " ";
 
@@ -170,6 +170,8 @@ const createPrayersList = (prayer) => {
         } 
         
         nextPrayerName = (getDay(new Date()) === 'Friday' && currentTime > fajr && currentTime < dhuhr) ? 'Jumu\'a' : nextPrayerName;
+
+        nextPrayerName = (hijriMonth === 'رمضان' && currentTime > maghrib && currentTime < isha) ? 'Taraweeh' : nextPrayerName;
         
         if (nextPrayerName === 'Midnight' || nextPrayerName === 'Firstthird' || nextPrayerName === 'Lastthird' || nextPrayerName === 'Imsak') {
             document.querySelector('#nextPrayerNameHtml').innerHTML = '';
