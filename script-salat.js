@@ -58,7 +58,6 @@ const fetchPrayerTimes = () => {
         });
 };
 
-
 const createPrayersList = (prayer) => {
     const methodName = prayer.data.meta.method.name;
 
@@ -167,11 +166,15 @@ const createPrayersList = (prayer) => {
             const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             const dayIndex = date.getDay();
             return daysOfWeek[dayIndex];
-        } 
-        
-        nextPrayerName = (getDay(new Date()) === 'Friday' && currentTime > fajr && currentTime < dhuhr) ? 'Jumu\'a' : nextPrayerName;
+        };
 
-        nextPrayerName = (hijriMonth === 'رمضان' && currentTime > maghrib && currentTime < isha) ? 'Taraweeh' : nextPrayerName;
+        if (getDay(currentTime) === 'Friday' && currentTime > fajr && currentTime < dhuhr) {
+            nextPrayerName = 'Jumu\'a';
+        }
+        
+        if (hijriMonth === 'رمضان' && currentTime > maghrib && currentTime < isha) {
+            nextPrayerName = 'Taraweeh';
+        }
         
         if (nextPrayerName === 'Midnight' || nextPrayerName === 'Firstthird' || nextPrayerName === 'Lastthird' || nextPrayerName === 'Imsak') {
             document.querySelector('#nextPrayerNameHtml').innerHTML = '';
@@ -297,7 +300,6 @@ const updateClock = () => {
 
     document.getElementById('countup').innerHTML = formattedTime;
 }
-
 
 setInterval(updateClock, 1000);
 updateClock();
