@@ -69,10 +69,14 @@ const createPrayersList = (prayer) => {
             return dayNumber + '<sup>st</sup>';
         } else if (dayNumber % 10 === 1) {
             return dayNumber + '<sup>st</sup>';
-        } else if (dayNumber % 10 === 2) {
-            return dayNumber + '<sup>nd</sup>';
         } else if (dayNumber % 10 === 3) {
             return dayNumber + '<sup>rd</sup>';
+        } else if (dayNumber === 2) {
+            return dayNumber + '<sup>nd</sup>';
+        } else if (dayNumber === 12) {
+            return dayNumber + '<sup>th</sup>';
+        } else if (dayNumber === 22) {
+            return dayNumber + '<sup>nd</sup>';
         } else {
             return dayNumber + '<sup>th</sup>';
         }
