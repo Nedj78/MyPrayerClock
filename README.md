@@ -1,6 +1,6 @@
 Description: a personal project that responds to the need to monitor daily prayer times
 
-Stack : html/css/javascript
+Stack: html/css/javascript
 
 Responsiveness: medium and wide screens
 
