@@ -92,7 +92,7 @@ const createPrayersList = (prayer) => {
     const hijriDay = prayer.data.date.hijri.day;
     const hijriMonth = prayer.data.date.hijri.month.ar;
     const hijriYear = prayer.data.date.hijri.year;
-    const hijriDate = "اليوم " + hijriDay + " " + hijriMonth + " ," + hijriYear + " ";
+    const hijriDate = "اليوم " + hijriDay + " " + hijriMonth + " " + hijriYear + " ";
 
     const fajr = prayer.data.timings.Fajr;
     const shurooq = prayer.data.timings.Sunrise;
