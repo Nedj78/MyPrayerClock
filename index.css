@@ -185,14 +185,19 @@ footer {
         width: 95%; 
     }
 
+    h3 {
+        padding: 10px 0 0 0;
+    }
+
     input[type="text"] {
-        font-size: 16px; 
+        font-size: 12pt; 
         user-scalable: no;
         -webkit-user-select: text; 
     }
 
     table {
-        width: 85vw; 
+        width: 95%; 
+        padding: 20px 0 0 0;
     }
 
     .main-container {
